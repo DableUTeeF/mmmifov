@@ -1,5 +1,5 @@
 import sys
-sys.path.extend(['/home/palm/PycharmProjects/mmdetection'])
+# sys.path.extend(['/home/palm/PycharmProjects/mmdetection'])
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
 from mmcv import Config
 import cv2
@@ -10,10 +10,10 @@ import os
 if __name__ == '__main__':
     dataset = json.load(open('/home/palm/PycharmProjects/mmdetection/anns/test.json'))
 
-    cfg = Config.fromfile('/home/palm/PycharmProjects/mmdetection/configs/cascade_rcnn/cascade_rcnn_r101_fpn_1x_algea.py')
+    cfg = Config.fromfile('configs/cascade_rcnn/cascade_rcnn_r101_fpn_1x_algea.py')
 
     # Build the detector
-    model = init_detector(cfg, '/home/palm/PycharmProjects/algea3/cascade_101_lab_1/epoch_20.pth', device='cuda')
+    model = init_detector(cfg, '/home/palm/PycharmProjects/algea3/cascade_101_lab_1/epoch_20.pth', device='cpu')
     os.makedirs('/media/palm/BiggerData/algea/cascade_101_lab_1', exist_ok=True)
     for data in dataset:
         # test a single image
@@ -22,7 +22,8 @@ if __name__ == '__main__':
         img = model.show_result(data['filename'],
                                 result,
                                 score_thr=0.3, show=False)
-        cv2.imwrite(os.path.join('/media/palm/BiggerData/algea/cascade_101_lab_1',
-                                 os.path.basename(data['filename'])),
-                    img)
+        print(result)
+        # cv2.imwrite(os.path.join('/media/palm/BiggerData/algea/cascade_101_lab_1',
+        #                          os.path.basename(data['filename'])),
+        #             img)
     # show_result_pyplot(model, '/media/palm/data/MicroAlgae/22_11_2020/images/00001.jpg', result, score_thr=0.3)
